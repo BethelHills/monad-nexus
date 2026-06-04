@@ -29,3 +29,84 @@ body {
 * {
   box-sizing: border-box;
 }
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes nexus-search-shimmer {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes nexus-node-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes nexus-radar-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.nexus-search-glow {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(20, 241, 149, 0.45),
+    rgba(183, 255, 122, 0.35),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: nexus-search-shimmer 3s ease-in-out infinite;
+}
+
+.nexus-grid {
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent);
+}
+
+.nexus-node-pulse {
+  animation: nexus-node-pulse 2.8s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.nexus-radar-ring {
+  animation: nexus-radar-spin 48s linear infinite;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nexus-search-glow,
+  .nexus-node-pulse,
+  .nexus-radar-ring {
+    animation: none;
+  }
+}

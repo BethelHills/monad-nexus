@@ -1,31 +1,60 @@
+"use client";
+
 import { Bot } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  MotionCard,
+  MotionItem,
+  MotionSection,
+  MotionStagger,
+} from "@/components/ui/motion";
 import { nexusRecommendations } from "@/lib/dashboard-data";
 
 export function NexusRecommendations() {
-  return (
-    <section className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-5 sm:p-6">
-      <header className="mb-5 flex items-center gap-3 border-b border-[#242424] pb-4">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#242424] bg-[#141414] text-[#14F195]">
-          <Bot size={18} />
-        </div>
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#A3A3A3]">
-            Nexus AI
-          </p>
-          <h2 className="text-lg font-semibold text-white">Recommendations</h2>
-        </div>
-      </header>
+  const reduce = useReducedMotion();
 
-      <ol className="space-y-4">
-        {nexusRecommendations.map((rec, i) => (
-          <li key={rec} className="flex gap-3 text-sm leading-relaxed">
-            <span className="shrink-0 font-mono text-xs text-[#14F195]">
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <span className="text-[#A3A3A3]">{rec}</span>
-          </li>
-        ))}
-      </ol>
-    </section>
+  return (
+    <MotionSection as="div" delay={0.16}>
+      <MotionCard className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-5 sm:p-6">
+        <header className="mb-5 flex items-center gap-3 border-b border-[#242424] pb-4">
+          <motion.div
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#242424] bg-[#141414] text-[#14F195]"
+            animate={
+              reduce
+                ? undefined
+                : { boxShadow: ["0 0 0 rgba(20,241,149,0)", "0 0 20px rgba(20,241,149,0.25)", "0 0 0 rgba(20,241,149,0)"] }
+            }
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            <Bot size={18} />
+          </motion.div>
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#A3A3A3]">
+              Nexus AI
+            </p>
+            <h2 className="text-lg font-semibold text-white">Recommendations</h2>
+          </div>
+        </header>
+
+        <MotionStagger>
+          <ol className="space-y-4">
+            {nexusRecommendations.map((rec, i) => (
+              <MotionItem key={rec}>
+                <motion.li
+                  className="flex gap-3 text-sm leading-relaxed"
+                  whileHover={reduce ? undefined : { x: 4 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <span className="shrink-0 font-mono text-xs text-[#14F195]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-[#A3A3A3]">{rec}</span>
+                </motion.li>
+              </MotionItem>
+            ))}
+          </ol>
+        </MotionStagger>
+      </MotionCard>
+    </MotionSection>
   );
 }

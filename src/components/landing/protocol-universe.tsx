@@ -1,19 +1,32 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  MotionButton,
+  MotionCard,
+  MotionItem,
+  MotionReveal,
+  MotionSection,
+  MotionStagger,
+} from "@/components/ui/motion";
 import { protocolDirectory } from "@/lib/landing-data";
 
 export function ProtocolUniverse() {
+  const reduce = useReducedMotion();
+
   return (
-    <section className="border-b border-[#242424] px-4 py-14 sm:px-6 lg:px-8">
+    <MotionSection className="border-b border-[#242424] px-4 py-14 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-8 max-w-xl">
+        <MotionReveal className="mb-8 max-w-xl">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#A3A3A3]">
             Protocol universe
           </p>
           <h2 className="mt-2 text-2xl font-semibold text-white sm:text-3xl">
             Directory
           </h2>
-        </div>
+        </MotionReveal>
 
-        <div className="hidden overflow-hidden rounded-xl border border-[#242424] md:block">
+        <MotionCard className="hidden overflow-hidden rounded-xl border border-[#242424] md:block">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-[#242424] bg-[#141414] text-xs uppercase tracking-wider text-[#A3A3A3]">
               <tr>
@@ -25,58 +38,69 @@ export function ProtocolUniverse() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#242424] bg-[#0E0E0E]">
-              {protocolDirectory.map((row) => (
-                <tr key={row.protocol} className="text-white">
+              {protocolDirectory.map((row, i) => (
+                <motion.tr
+                  key={row.protocol}
+                  className="text-white"
+                  initial={reduce ? false : { opacity: 0, x: -8 }}
+                  whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  whileHover={
+                    reduce
+                      ? undefined
+                      : { backgroundColor: "rgba(20, 241, 149, 0.05)" }
+                  }
+                >
                   <td className="px-5 py-4 font-medium">{row.protocol}</td>
                   <td className="px-5 py-4 text-[#A3A3A3]">{row.category}</td>
                   <td className="px-5 py-4 text-[#B7FF7A]">{row.signal}</td>
                   <td className="px-5 py-4 text-[#A3A3A3]">{row.risk}</td>
                   <td className="px-5 py-4">
                     <div className="flex gap-4 text-xs font-medium">
-                      <button
+                      <MotionButton
                         type="button"
                         className="text-[#14F195] hover:underline"
                       >
                         Analyze
-                      </button>
-                      <button
+                      </MotionButton>
+                      <MotionButton
                         type="button"
                         className="text-[#A3A3A3] hover:text-white hover:underline"
                       >
                         Add to Watchlist
-                      </button>
+                      </MotionButton>
                     </div>
                   </td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </MotionCard>
 
-        <ul className="space-y-3 md:hidden">
+        <MotionStagger className="space-y-3 md:hidden">
           {protocolDirectory.map((row) => (
-            <li
-              key={row.protocol}
-              className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-4"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <p className="font-medium text-white">{row.protocol}</p>
-                <span className="text-xs text-[#A3A3A3]">{row.category}</span>
-              </div>
-              <p className="mt-2 text-sm text-[#B7FF7A]">{row.signal}</p>
-              <p className="mt-1 text-xs text-[#A3A3A3]">Risk: {row.risk}</p>
-              <div className="mt-4 flex gap-4 text-xs font-medium">
-                <button type="button" className="text-[#14F195]">
-                  Analyze
-                </button>
-                <button type="button" className="text-[#A3A3A3]">
-                  Watchlist
-                </button>
-              </div>
-            </li>
+            <MotionItem key={row.protocol}>
+              <MotionCard className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="font-medium text-white">{row.protocol}</p>
+                  <span className="text-xs text-[#A3A3A3]">{row.category}</span>
+                </div>
+                <p className="mt-2 text-sm text-[#B7FF7A]">{row.signal}</p>
+                <p className="mt-1 text-xs text-[#A3A3A3]">Risk: {row.risk}</p>
+                <div className="mt-4 flex gap-4 text-xs font-medium">
+                  <MotionButton type="button" className="text-[#14F195]">
+                    Analyze
+                  </MotionButton>
+                  <MotionButton type="button" className="text-[#A3A3A3]">
+                    Watchlist
+                  </MotionButton>
+                </div>
+              </MotionCard>
+            </MotionItem>
           ))}
-        </ul>
+        </MotionStagger>
       </div>
-    </section>
+    </MotionSection>
   );
 }
