@@ -55,24 +55,26 @@ function Toggle({
 
 function SettingsForm() {
   const [settings, setSettings] = useState<NexusSettings>(() => loadSettings());
-  const [saved, setSaved] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string | null>(
+    "Settings restored from your device.",
+  );
 
   function update<K extends keyof NexusSettings>(key: K, value: NexusSettings[K]) {
     setSettings((s) => ({ ...s, [key]: value }));
-    setSaved(false);
+    setStatusMessage(null);
   }
 
   function handleSave() {
     saveSettings(settings);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+    setStatusMessage("Settings saved successfully.");
+    setTimeout(() => setStatusMessage(null), 3000);
   }
 
   function handleReset() {
     setSettings(defaultSettings);
     saveSettings(defaultSettings);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+    setStatusMessage("Settings reset to defaults.");
+    setTimeout(() => setStatusMessage(null), 3000);
   }
 
   return (
@@ -238,9 +240,9 @@ function SettingsForm() {
           </MotionButton>
         </div>
 
-        {saved && (
-          <p className="text-center text-xs text-[#14F195]">
-            Settings saved successfully.
+        {statusMessage && (
+          <p className="text-center text-xs text-[#14F195]" role="status">
+            {statusMessage}
           </p>
         )}
       </div>

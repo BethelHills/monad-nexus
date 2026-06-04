@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Bot, Search, Wallet } from "lucide-react";
+import { ArrowRight, Bot, Search, Wallet } from "lucide-react";
 import { MotionReveal } from "@/components/ui/motion";
+import { buildAgentChatUrl } from "@/lib/agent-prompts";
 import {
   historyEntries,
   type HistoryFilter,
@@ -128,33 +130,42 @@ export function HistoryWorkspace() {
                           key={entry.id}
                           className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-4"
                         >
-                          <div className="flex gap-3">
-                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#242424] bg-[#141414] text-[#14F195]">
-                              <Icon size={16} />
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                                <p className="text-sm font-medium text-white">
-                                  {entry.title}
-                                </p>
-                                <span className="text-[10px] text-[#A3A3A3]">
-                                  {entry.timestamp}
-                                </span>
+                          <div className="flex flex-col gap-4 sm:flex-row sm:gap-3">
+                            <div className="flex min-w-0 flex-1 gap-3">
+                              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#242424] bg-[#141414] text-[#14F195]">
+                                <Icon size={16} />
                               </div>
-                              <p className="mt-2 text-xs leading-relaxed text-[#A3A3A3]">
-                                {entry.summary}
-                              </p>
-                              <div className="mt-2 flex flex-wrap gap-1.5">
-                                {entry.tags.map((tag) => (
-                                  <span
-                                    key={tag}
-                                    className="rounded border border-[#242424] px-1.5 py-0.5 text-[10px] text-[#B7FF7A]"
-                                  >
-                                    {tag}
+                              <div className="min-w-0 flex-1">
+                                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                                  <p className="text-sm font-medium text-white">
+                                    {entry.title}
+                                  </p>
+                                  <span className="text-[10px] text-[#A3A3A3]">
+                                    {entry.timestamp}
                                   </span>
-                                ))}
+                                </div>
+                                <p className="mt-2 text-xs leading-relaxed text-[#A3A3A3]">
+                                  {entry.summary}
+                                </p>
+                                <div className="mt-2 flex flex-wrap gap-1.5">
+                                  {entry.tags.map((tag) => (
+                                    <span
+                                      key={tag}
+                                      className="rounded border border-[#242424] px-1.5 py-0.5 text-[10px] text-[#B7FF7A]"
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
                               </div>
                             </div>
+                            <Link
+                              href={buildAgentChatUrl(entry.reviewPrompt)}
+                              className="inline-flex w-full items-center justify-center gap-1 rounded-lg border border-[#242424] bg-[#141414] px-4 py-2 text-xs font-medium text-[#14F195] transition-colors hover:border-[#14F195]/40 sm:w-auto sm:shrink-0"
+                            >
+                              Review
+                              <ArrowRight size={14} />
+                            </Link>
                           </div>
                         </li>
                       );

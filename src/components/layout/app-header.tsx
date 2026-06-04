@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
+import { WalletStatusButton } from "@/components/wallet/wallet-status-button";
 import { appNavItems } from "@/lib/app-nav";
 
 type AppHeaderProps = {
@@ -31,9 +32,14 @@ export function AppHeader({ onMenuOpen }: AppHeaderProps) {
           Monad <span className="text-[#14F195]">Nexus</span>
         </Link>
       </div>
-      {current && (
-        <span className="text-xs text-[#A3A3A3]">{current.label}</span>
-      )}
+      <div className="flex items-center gap-2">
+        {current && (
+          <span className="hidden text-xs text-[#A3A3A3] sm:inline">
+            {current.label}
+          </span>
+        )}
+        <WalletStatusButton compact className="max-w-[140px]" />
+      </div>
     </header>
   );
 }

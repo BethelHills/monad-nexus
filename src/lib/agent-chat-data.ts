@@ -1,3 +1,5 @@
+import { getProtocolByName } from "@/lib/protocols-data";
+
 export const agentSuggestedPrompts = [
   "Analyze my Monad wallet",
   "Show trending Monad protocols",
@@ -12,13 +14,123 @@ export type InsightCard = {
   tone?: "neutral" | "positive" | "warning";
 };
 
+export type StructuredCardType =
+  | "wallet-intelligence"
+  | "protocol-insight"
+  | "opportunity-recommendation"
+  | "risk-summary";
+
+export type StructuredCardData = {
+  type: StructuredCardType;
+  title: string;
+  items: { label: string; value: string }[];
+};
+
 export type AgentMockResponse = {
   promptMatch: string;
   reply: string;
   insights: InsightCard[];
+  structuredCards?: StructuredCardData[];
   walletContext?: string;
   protocolContext?: string;
 };
+
+const keywordMatchers: { pattern: RegExp; cards: StructuredCardType[] }[] = [
+  {
+    pattern: /wallet|portfolio|balance|address|transaction/i,
+    cards: ["wallet-intelligence", "risk-summary"],
+  },
+  {
+    pattern: /protocol|kuru|ambient|apriori|magma|bean|monadswap|layerzero|wormhole/i,
+    cards: ["protocol-insight"],
+  },
+  {
+    pattern: /opportunit|yield|staking|stake|defi/i,
+    cards: ["opportunity-recommendation", "risk-summary"],
+  },
+  {
+    pattern: /ecosystem|activity|network|trend/i,
+    cards: ["protocol-insight", "risk-summary"],
+  },
+];
+
+export function detectStructuredCards(prompt: string): StructuredCardType[] {
+  const found = new Set<StructuredCardType>();
+  for (const { pattern, cards } of keywordMatchers) {
+    if (pattern.test(prompt)) {
+      cards.forEach((c) => found.add(c));
+    }
+  }
+  return [...found];
+}
+
+function buildStructuredCards(
+  prompt: string,
+  types: StructuredCardType[],
+): StructuredCardData[] {
+  const normalized = prompt.toLowerCase();
+
+  return types.map((type) => {
+    switch (type) {
+      case "wallet-intelligence":
+        return {
+          type,
+          title: "Wallet Intelligence",
+          items: [
+            { label: "Exposure", value: "3 protocols · moderate concentration" },
+            { label: "Native assets", value: "42% MON" },
+            { label: "Stablecoins", value: "24%" },
+            { label: "Signal", value: "No anomalous outflows (48h)" },
+          ],
+        };
+      case "protocol-insight": {
+        const protocol =
+          ["kuru", "ambient", "apriori", "magma", "bean", "monadswap"]
+            .map((name) => getProtocolByName(name))
+            .find((p) => p && normalized.includes(p.name.toLowerCase())) ??
+          getProtocolByName("Kuru");
+
+        return {
+          type,
+          title: "Protocol Insight",
+          items: [
+            { label: "Protocol", value: protocol?.name ?? "Kuru" },
+            { label: "Category", value: protocol?.category ?? "DEX" },
+            { label: "Signal", value: protocol?.signal ?? "Volume surge" },
+            {
+              label: "Confidence",
+              value: `${protocol?.confidence ?? 94}%`,
+            },
+          ],
+        };
+      }
+      case "opportunity-recommendation":
+        return {
+          type,
+          title: "Opportunity Recommendation",
+          items: [
+            { label: "Primary", value: "Apriori staking — yield expansion" },
+            { label: "Secondary", value: "Kuru DEX — volume breakout" },
+            { label: "Confidence", value: "88% fit (moderate risk)" },
+            { label: "Action", value: "Review lock period before sizing" },
+          ],
+        };
+      case "risk-summary":
+        return {
+          type,
+          title: "Risk Summary",
+          items: [
+            { label: "Posture", value: "Low–moderate" },
+            { label: "Concentration", value: "Top 3 protocols · 68%" },
+            { label: "Liquidity", value: "Strong" },
+            { label: "Alert", value: "None critical" },
+          ],
+        };
+      default:
+        return { type, title: "Insight", items: [] };
+    }
+  });
+}
 
 export const agentMockResponses: AgentMockResponse[] = [
   {
@@ -30,7 +142,7 @@ export const agentMockResponses: AgentMockResponse[] = [
       { label: "Risk", value: "Low–moderate", tone: "neutral" },
       { label: "Top sector", value: "DEX liquidity", tone: "positive" },
     ],
-    walletContext: "0x8f3a…c21d · 8 protocols · 4 active positions",
+    walletContext: "Connect wallet for live address · 8 protocols indexed",
     protocolContext: "Kuru, Ambient, Apriori",
   },
   {
@@ -42,7 +154,7 @@ export const agentMockResponses: AgentMockResponse[] = [
       { label: "Liquidity", value: "Ambient ↑", tone: "positive" },
       { label: "Watch", value: "Bean Exchange", tone: "neutral" },
     ],
-    walletContext: "No wallet required for ecosystem scan",
+    walletContext: "Ecosystem scan · no wallet required",
     protocolContext: "Kuru · Ambient · Apriori · Magma",
   },
   {
@@ -102,5 +214,15 @@ export function findMockResponse(prompt: string): AgentMockResponse {
       normalized.includes(r.promptMatch.toLowerCase()) ||
       r.promptMatch.toLowerCase().includes(normalized),
   );
-  return match ?? defaultAgentReply;
+  const base = match ?? defaultAgentReply;
+  const cardTypes = detectStructuredCards(prompt);
+  const structuredCards =
+    cardTypes.length > 0
+      ? buildStructuredCards(prompt, cardTypes)
+      : base.structuredCards;
+
+  return {
+    ...base,
+    ...(structuredCards ? { structuredCards } : {}),
+  };
 }

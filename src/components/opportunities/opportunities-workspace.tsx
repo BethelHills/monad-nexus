@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowRight } from "lucide-react";
-import { MotionButton, MotionCard, MotionReveal } from "@/components/ui/motion";
+import { ArrowRight, Search } from "lucide-react";
+import { MotionCard, MotionReveal } from "@/components/ui/motion";
+import { buildOpportunityAnalyzeUrl } from "@/lib/agent-prompts";
 import {
   opportunities,
   opportunityCategories,
@@ -29,14 +31,22 @@ const categoryAngles: Record<OpportunityCategory, number> = {
 
 export function OpportunitiesWorkspace() {
   const [category, setCategory] = useState<OpportunityCategory | "All">("All");
+  const [search, setSearch] = useState("");
 
-  const filtered = useMemo(
-    () =>
-      category === "All"
-        ? opportunities
-        : opportunities.filter((o) => o.category === category),
-    [category],
-  );
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return opportunities.filter((item) => {
+      const matchesCategory =
+        category === "All" || item.category === category;
+      const matchesSearch =
+        !q ||
+        item.title.toLowerCase().includes(q) ||
+        item.protocol.toLowerCase().includes(q) ||
+        item.description.toLowerCase().includes(q) ||
+        item.category.toLowerCase().includes(q);
+      return matchesCategory && matchesSearch;
+    });
+  }, [category, search]);
 
   const cx = 100;
   const cy = 100;
@@ -62,6 +72,19 @@ export function OpportunitiesWorkspace() {
           Yield, staking, DEX, and wallet signals ranked by confidence.
         </p>
       </MotionReveal>
+
+      <div className="mt-6 rounded-xl border border-[#242424] bg-[#0E0E0E] p-1">
+        <div className="flex items-center gap-3 px-4 py-3">
+          <Search className="shrink-0 text-[#A3A3A3]" size={18} />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search opportunities..."
+            className="w-full min-w-0 bg-transparent text-sm text-white outline-none placeholder:text-[#A3A3A3]"
+            aria-label="Search opportunities"
+          />
+        </div>
+      </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[320px_1fr]">
         <MotionCard className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-5">
@@ -100,9 +123,9 @@ export function OpportunitiesWorkspace() {
           </ul>
         </MotionCard>
 
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-4">
           <div className="flex flex-wrap gap-2">
-            <MotionButton
+            <button
               type="button"
               onClick={() => setCategory("All")}
               className={cn(
@@ -113,9 +136,9 @@ export function OpportunitiesWorkspace() {
               )}
             >
               All
-            </MotionButton>
+            </button>
             {opportunityCategories.map((cat) => (
-              <MotionButton
+              <button
                 key={cat}
                 type="button"
                 onClick={() => setCategory(cat)}
@@ -127,47 +150,62 @@ export function OpportunitiesWorkspace() {
                 )}
               >
                 {cat}
-              </MotionButton>
+              </button>
             ))}
           </div>
 
-          <ul className="space-y-3">
-            {filtered.map((item) => (
-              <MotionCard
-                key={item.id}
-                className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-4"
-              >
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-[10px] font-medium uppercase tracking-wider text-[#B7FF7A]">
-                        {item.category}
-                      </span>
-                      <span className="font-mono text-[10px] text-[#14F195]">
-                        {item.confidence}% confidence
-                      </span>
-                      <span className="text-[10px] text-[#A3A3A3]">
-                        Risk: {item.risk}
-                      </span>
+          {filtered.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-[#242424] bg-[#0E0E0E] px-6 py-12 text-center text-sm text-[#A3A3A3]">
+              No opportunities match your search.
+            </div>
+          ) : (
+            <ul className="space-y-3">
+              {filtered.map((item) => (
+                <MotionCard
+                  key={item.id}
+                  className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-4"
+                >
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[10px] font-medium uppercase tracking-wider text-[#B7FF7A]">
+                          {item.category}
+                        </span>
+                        <span className="font-mono text-[10px] text-[#14F195]">
+                          {item.confidence}% confidence
+                        </span>
+                        <span
+                          className={cn(
+                            "text-[10px] font-medium",
+                            item.risk === "Low"
+                              ? "text-[#14F195]"
+                              : item.risk === "Medium"
+                                ? "text-amber-400"
+                                : "text-red-400",
+                          )}
+                        >
+                          Risk: {item.risk}
+                        </span>
+                      </div>
+                      <h3 className="mt-2 text-sm font-semibold text-white">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1 text-xs text-[#A3A3A3]">
+                        {item.protocol} · {item.description}
+                      </p>
                     </div>
-                    <h3 className="mt-2 text-sm font-semibold text-white">
-                      {item.title}
-                    </h3>
-                    <p className="mt-1 text-xs text-[#A3A3A3]">
-                      Protocol: {item.protocol}
-                    </p>
+                    <Link
+                      href={buildOpportunityAnalyzeUrl(item.title, item.protocol)}
+                      className="inline-flex w-full shrink-0 items-center justify-center gap-1 rounded-lg border border-[#242424] bg-[#141414] px-4 py-2 text-xs font-medium text-white transition-colors hover:border-[#14F195]/40 sm:w-auto"
+                    >
+                      Analyze
+                      <ArrowRight size={14} />
+                    </Link>
                   </div>
-                  <MotionButton
-                    type="button"
-                    className="inline-flex w-full shrink-0 items-center justify-center gap-1 rounded-lg border border-[#242424] bg-[#141414] px-4 py-2 text-xs font-medium text-white hover:border-[#14F195]/40 sm:w-auto"
-                  >
-                    Analyze
-                    <ArrowRight size={14} />
-                  </MotionButton>
-                </div>
-              </MotionCard>
-            ))}
-          </ul>
+                </MotionCard>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>

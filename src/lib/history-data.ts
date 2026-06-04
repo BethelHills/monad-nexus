@@ -7,6 +7,7 @@ export type HistoryEntry = {
   summary: string;
   timestamp: string;
   tags: string[];
+  reviewPrompt: string;
 };
 
 export const historyEntries: HistoryEntry[] = [
@@ -17,6 +18,7 @@ export const historyEntries: HistoryEntry[] = [
     summary: "AI classified portfolio risk as low–moderate with stablecoin drift +6%.",
     timestamp: "Today · 2:14 PM",
     tags: ["wallet", "risk"],
+    reviewPrompt: "Analyze my Monad wallet risk profile",
   },
   {
     id: "h2",
@@ -25,6 +27,7 @@ export const historyEntries: HistoryEntry[] = [
     summary: "Compared 24h swap volume against 7d baseline — +31% breakout detected.",
     timestamp: "Today · 11:02 AM",
     tags: ["kuru", "dex"],
+    reviewPrompt: "Analyze Kuru on Monad",
   },
   {
     id: "h3",
@@ -33,6 +36,7 @@ export const historyEntries: HistoryEntry[] = [
     summary: "MON 42%, Stables 24%, DeFi 20%, Other 14%. Health score 92.",
     timestamp: "Yesterday · 6:40 PM",
     tags: ["allocation"],
+    reviewPrompt: "Analyze my Monad wallet allocation",
   },
   {
     id: "h4",
@@ -41,6 +45,7 @@ export const historyEntries: HistoryEntry[] = [
     summary: "Apriori and Magma flagged as best-fit yield venues for current profile.",
     timestamp: "Yesterday · 3:18 PM",
     tags: ["staking", "yield"],
+    reviewPrompt: "Find staking opportunities on Monad",
   },
   {
     id: "h5",
@@ -49,6 +54,7 @@ export const historyEntries: HistoryEntry[] = [
     summary: "Depth improved across major pairs; recommended for liquidity providers.",
     timestamp: "Mar 2 · 9:55 AM",
     tags: ["ambient", "liquidity"],
+    reviewPrompt: "Analyze Ambient on Monad",
   },
   {
     id: "h6",
@@ -57,6 +63,7 @@ export const historyEntries: HistoryEntry[] = [
     summary: "No unusual outflows or contract interactions in the last 48 hours.",
     timestamp: "Mar 1 · 8:12 PM",
     tags: ["security"],
+    reviewPrompt: "Explain recent wallet activity on Monad",
   },
 ];
 

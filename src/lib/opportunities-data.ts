@@ -1,3 +1,5 @@
+import { ecosystemProtocols } from "@/lib/protocols-data";
+
 export type OpportunityCategory =
   | "Yield"
   | "Staking"
@@ -12,6 +14,7 @@ export type Opportunity = {
   confidence: number;
   risk: "Low" | "Medium" | "High";
   protocol: string;
+  description: string;
 };
 
 export const opportunityCategories: OpportunityCategory[] = [
@@ -30,6 +33,7 @@ export const opportunities: Opportunity[] = [
     confidence: 88,
     risk: "Medium",
     protocol: "Apriori",
+    description: "Yield curve favors medium-term locks on testnet.",
   },
   {
     id: "2",
@@ -38,6 +42,7 @@ export const opportunities: Opportunity[] = [
     confidence: 81,
     risk: "Low",
     protocol: "Magma",
+    description: "Faster unstake windows observed across validators.",
   },
   {
     id: "3",
@@ -46,6 +51,7 @@ export const opportunities: Opportunity[] = [
     confidence: 94,
     risk: "Low",
     protocol: "Kuru",
+    description: "24h volume +31% vs 7-day baseline.",
   },
   {
     id: "4",
@@ -54,6 +60,7 @@ export const opportunities: Opportunity[] = [
     confidence: 89,
     risk: "Low",
     protocol: "Ambient",
+    description: "Major pair depth at weekly highs.",
   },
   {
     id: "5",
@@ -62,6 +69,7 @@ export const opportunities: Opportunity[] = [
     confidence: 72,
     risk: "Medium",
     protocol: "Bean Exchange",
+    description: "New pairs listed with early liquidity.",
   },
   {
     id: "6",
@@ -70,6 +78,16 @@ export const opportunities: Opportunity[] = [
     confidence: 86,
     risk: "Medium",
     protocol: "Multi",
+    description: "14 wallets added liquidity in 6h window.",
+  },
+  {
+    id: "7",
+    title: "MonadSwap momentum signal",
+    category: "DEX Activity",
+    confidence: 78,
+    risk: "Medium",
+    protocol: "MonadSwap",
+    description: "Swap activity trending on native pairs.",
   },
 ];
 
@@ -80,3 +98,10 @@ export const radarScores: Record<OpportunityCategory, number> = {
   "New Protocols": 64,
   "Wallet Signals": 88,
 };
+
+export const protocolOpportunityHints = ecosystemProtocols.map((p) => ({
+  name: p.name,
+  actionPrompt: p.actionPrompt,
+  confidence: p.confidence,
+  risk: p.risk,
+}));

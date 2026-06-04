@@ -1,7 +1,8 @@
 "use client";
 
-import { Search, Wallet } from "lucide-react";
+import { Search } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
+import { WalletStatusButton } from "@/components/wallet/wallet-status-button";
 import {
   AnimatedSearchFrame,
   MotionButton,
@@ -10,11 +11,13 @@ import {
   MotionItem,
   PulseDot,
 } from "@/components/ui/motion";
+import { useWalletPortfolio } from "@/hooks/use-wallet-portfolio";
 import { commandSuggestions } from "@/lib/dashboard-data";
 import { easeOut, slideDown } from "@/lib/motion";
 
 export function NexusCommandCenter() {
   const reduce = useReducedMotion();
+  const wallet = useWalletPortfolio();
 
   return (
     <motion.section
@@ -33,19 +36,18 @@ export function NexusCommandCenter() {
             <h1 className="mt-2 text-xl font-semibold text-white sm:text-2xl">
               Command center
             </h1>
+            {wallet.isDemoMode && (
+              <p className="mt-1 text-xs text-[#A3A3A3]">
+                Demo mode · connect wallet for live data
+              </p>
+            )}
           </MotionReveal>
-          <MotionReveal delay={0.08} className="flex flex-wrap gap-2">
+          <MotionReveal delay={0.08} className="flex flex-wrap items-center gap-2">
             <span className="flex items-center gap-2 rounded-md border border-[#242424] bg-[#141414] px-2.5 py-1 text-xs font-medium text-[#B7FF7A]">
               <PulseDot />
-              Monad Testnet
+              {wallet.isConnected ? wallet.chainName : "Monad Testnet"}
             </span>
-            <MotionButton
-              type="button"
-              className="inline-flex items-center gap-2 rounded-md border border-[#242424] bg-[#141414] px-3 py-1.5 text-xs font-medium text-white hover:border-[#14F195]/40"
-            >
-              <Wallet size={14} className="text-[#14F195]" />
-              Connect wallet
-            </MotionButton>
+            <WalletStatusButton className="w-full sm:w-auto" />
           </MotionReveal>
         </div>
 

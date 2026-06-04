@@ -1,18 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Bot, Search, Send, Sparkles, Wallet } from "lucide-react";
+import { AgentStructuredCards } from "@/components/agent-chat/agent-structured-cards";
 import {
   AnimatedSearchFrame,
   MotionButton,
   MotionCard,
   MotionReveal,
 } from "@/components/ui/motion";
+import { useWalletPortfolio } from "@/hooks/use-wallet-portfolio";
 import {
   agentSuggestedPrompts,
   findMockResponse,
-  type AgentMockResponse,
   type InsightCard,
+  type StructuredCardData,
 } from "@/lib/agent-chat-data";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +23,7 @@ type ChatMessage = {
   role: "user" | "assistant";
   content: string;
   insights?: InsightCard[];
+  structuredCards?: StructuredCardData[];
 };
 
 function insightToneClass(tone?: InsightCard["tone"]) {
@@ -29,12 +32,20 @@ function insightToneClass(tone?: InsightCard["tone"]) {
   return "border-[#242424] text-[#A3A3A3]";
 }
 
-export function AgentChatWorkspace() {
+type AgentChatWorkspaceProps = {
+  initialPrompt?: string;
+};
+
+export function AgentChatWorkspace({ initialPrompt }: AgentChatWorkspaceProps) {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [context, setContext] = useState<AgentMockResponse | null>(null);
+  const [context, setContext] = useState<ReturnType<typeof findMockResponse> | null>(
+    null,
+  );
+  const wallet = useWalletPortfolio();
+  const initialHandled = useRef(false);
 
-  function sendMessage(text: string) {
+  const sendMessage = useCallback((text: string) => {
     const trimmed = text.trim();
     if (!trimmed) return;
 
@@ -49,10 +60,23 @@ export function AgentChatWorkspace() {
         role: "assistant",
         content: mock.reply,
         insights: mock.insights,
+        structuredCards: mock.structuredCards,
       },
     ]);
     setInput("");
-  }
+  }, []);
+
+  useEffect(() => {
+    if (initialPrompt && !initialHandled.current) {
+      initialHandled.current = true;
+      sendMessage(initialPrompt);
+    }
+  }, [initialPrompt, sendMessage]);
+
+  const walletContextText = wallet.isConnected
+    ? `${wallet.truncatedAddress} · ${wallet.chainName} · ${wallet.balanceDisplay}${wallet.balanceNote ? ` — ${wallet.balanceNote}` : ""}`
+    : (context?.walletContext ??
+      "Connect a wallet to personalize portfolio and risk analysis.");
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
@@ -64,13 +88,13 @@ export function AgentChatWorkspace() {
           Nexus intelligence terminal
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-[#A3A3A3]">
-          Ask about wallets, protocols, and opportunities. Responses use mock
-          intelligence data until live models are connected.
+          Structured intelligence for wallets, protocols, opportunities, and
+          ecosystem activity. Live wallet context when connected.
         </p>
       </MotionReveal>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_300px]">
-        <div className="space-y-6">
+        <div className="space-y-6 min-w-0">
           <AnimatedSearchFrame>
             <form
               className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center"
@@ -79,7 +103,7 @@ export function AgentChatWorkspace() {
                 sendMessage(input);
               }}
             >
-              <div className="flex flex-1 items-center gap-3">
+              <div className="flex min-w-0 flex-1 items-center gap-3">
                 <Search className="shrink-0 text-[#A3A3A3]" size={18} />
                 <input
                   value={input}
@@ -141,6 +165,9 @@ export function AgentChatWorkspace() {
                         <p className="text-sm leading-relaxed text-white">
                           {msg.content}
                         </p>
+                        {msg.structuredCards && (
+                          <AgentStructuredCards cards={msg.structuredCards} />
+                        )}
                         {msg.insights && msg.insights.length > 0 && (
                           <div className="mt-4 grid gap-2 sm:grid-cols-3">
                             {msg.insights.map((card) => (
@@ -170,7 +197,7 @@ export function AgentChatWorkspace() {
           </div>
         </div>
 
-        <aside className="space-y-4">
+        <aside className="space-y-4 min-w-0">
           <MotionCard className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-4">
             <div className="flex items-center gap-2 text-[#14F195]">
               <Wallet size={16} />
@@ -179,9 +206,13 @@ export function AgentChatWorkspace() {
               </h2>
             </div>
             <p className="mt-3 text-xs leading-relaxed text-[#A3A3A3]">
-              {context?.walletContext ??
-                "Connect a wallet to personalize portfolio and risk analysis."}
+              {walletContextText}
             </p>
+            {wallet.isDemoMode && (
+              <p className="mt-2 text-[10px] uppercase tracking-wider text-[#A3A3A3]">
+                Demo mode
+              </p>
+            )}
           </MotionCard>
 
           <MotionCard className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-4">
@@ -193,7 +224,7 @@ export function AgentChatWorkspace() {
             </div>
             <p className="mt-3 text-xs leading-relaxed text-[#A3A3A3]">
               {context?.protocolContext ??
-                "Protocol signals refresh from the Monad ecosystem index."}
+                "Kuru, Ambient, Apriori, Magma, Bean Exchange, MonadSwap, LayerZero, Wormhole"}
             </p>
           </MotionCard>
         </aside>

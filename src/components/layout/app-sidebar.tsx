@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
+import { WalletStatusButton } from "@/components/wallet/wallet-status-button";
 import { appNavItems } from "@/lib/app-nav";
 import { cn } from "@/lib/utils";
 
@@ -74,11 +75,14 @@ export function AppSidebar({ open, onClose }: AppSidebarProps) {
 
         {nav}
 
-        <div className="mt-auto border-t border-[#242424] p-4">
+        <div className="mt-auto space-y-3 border-t border-[#242424] p-4">
+          <div className="hidden lg:block">
+            <WalletStatusButton className="w-full" />
+          </div>
           <Link
             href="/"
             onClick={onClose}
-            className="text-xs text-[#A3A3A3] transition-colors hover:text-[#14F195]"
+            className="block text-xs text-[#A3A3A3] transition-colors hover:text-[#14F195]"
           >
             ← Back to landing
           </Link>

@@ -1,3 +1,5 @@
+import { protocolSignals as ecosystemProtocolSignals } from "@/lib/protocols-data";
+
 export const commandSuggestions = [
   "Analyze my wallet",
   "Find high-signal protocols",
@@ -57,43 +59,7 @@ export const opportunitySignals = [
   },
 ] as const;
 
-export const protocolSignals = [
-  {
-    protocol: "Kuru",
-    sector: "DEX",
-    signal: "Volume breakout",
-    confidence: 94,
-    status: "Active",
-  },
-  {
-    protocol: "Ambient",
-    sector: "DEX",
-    signal: "Liquidity depth",
-    confidence: 89,
-    status: "Active",
-  },
-  {
-    protocol: "Apriori",
-    sector: "Staking",
-    signal: "Yield expansion",
-    confidence: 86,
-    status: "Watch",
-  },
-  {
-    protocol: "Magma",
-    sector: "Staking",
-    signal: "Inflow steady",
-    confidence: 81,
-    status: "Active",
-  },
-  {
-    protocol: "Bean Exchange",
-    sector: "DEX",
-    signal: "New market",
-    confidence: 72,
-    status: "New",
-  },
-] as const;
+export const protocolSignals = ecosystemProtocolSignals;
 
 export const nexusRecommendations = [
   "Watch Kuru activity — swap volume is outpacing ecosystem average.",
