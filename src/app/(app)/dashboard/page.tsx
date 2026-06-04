@@ -4,11 +4,10 @@ import { NexusRecommendations } from "@/components/dashboard/nexus-recommendatio
 import { OpportunityFeed } from "@/components/dashboard/opportunity-feed";
 import { ProtocolSignalTable } from "@/components/dashboard/protocol-signal-table";
 import { WalletIntelligencePanel } from "@/components/dashboard/wallet-intelligence-panel";
-import { PageShell } from "@/components/layout/page-shell";
 
 export default function DashboardPage() {
   return (
-    <PageShell>
+    <>
       <NexusCommandCenter />
 
       <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
@@ -24,6 +23,6 @@ export default function DashboardPage() {
 
         <NexusRecommendations />
       </div>
-    </PageShell>
+    </>
   );
 }

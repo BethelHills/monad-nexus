@@ -1,0 +1,39 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu } from "lucide-react";
+import { appNavItems } from "@/lib/app-nav";
+
+type AppHeaderProps = {
+  onMenuOpen: () => void;
+};
+
+export function AppHeader({ onMenuOpen }: AppHeaderProps) {
+  const pathname = usePathname();
+  const current = appNavItems.find(
+    (item) =>
+      pathname === item.href || pathname.startsWith(`${item.href}/`),
+  );
+
+  return (
+    <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[#242424] bg-[#050505]/95 px-4 py-3 backdrop-blur-md lg:hidden">
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={onMenuOpen}
+          className="rounded-lg border border-[#242424] bg-[#0E0E0E] p-2 text-white"
+          aria-label="Open menu"
+        >
+          <Menu size={18} />
+        </button>
+        <Link href="/dashboard" className="text-sm font-semibold text-white">
+          Monad <span className="text-[#14F195]">Nexus</span>
+        </Link>
+      </div>
+      {current && (
+        <span className="text-xs text-[#A3A3A3]">{current.label}</span>
+      )}
+    </header>
+  );
+}
