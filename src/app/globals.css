@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --nexus-bg: #050505;
+  --nexus-surface: #0e0e0e;
+  --nexus-deep: #141414;
+  --nexus-border: #242424;
+  --nexus-primary: #14f195;
+  --nexus-secondary: #b7ff7a;
+  --nexus-text: #ffffff;
+  --nexus-muted: #a3a3a3;
+  --background: var(--nexus-bg);
+  --foreground: var(--nexus-text);
 }
 
 @theme inline {
@@ -12,15 +20,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: var(--nexus-bg);
+  color: var(--nexus-text);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
-body {
-  background: #020607;
-  color: #ffffff;
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+* {
+  box-sizing: border-box;
 }
