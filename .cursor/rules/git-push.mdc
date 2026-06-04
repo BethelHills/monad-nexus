@@ -1,0 +1,24 @@
+---
+description: Push all project changes to the monad-nexus GitHub remote after completing work
+alwaysApply: true
+---
+
+# Git push to monad-nexus
+
+After making changes in this project, commit and push them to the canonical remote:
+
+- **Remote:** `origin` → `https://github.com/BethelHills/monad-nexus.git`
+- **Default branch:** `main`
+
+## Workflow
+
+1. Run `git status` and `git diff` from the project root (`monad-nexus/`), not the parent home directory.
+2. Stage only files under this project; never stage paths outside the repo.
+3. Commit with a clear message when the user asked for work or when pushing is implied.
+4. Push: `git push origin main` (use `-u origin main` on first push of a new branch).
+
+## Safety
+
+- Do not force-push to `main` unless the user explicitly requests it.
+- Do not commit `.env*` or other secrets.
+- Do not amend commits that were already pushed unless the user explicitly requests it.
