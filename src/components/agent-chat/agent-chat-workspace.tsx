@@ -44,6 +44,7 @@ export function AgentChatWorkspace({ initialPrompt }: AgentChatWorkspaceProps) {
   );
   const wallet = useWalletPortfolio();
   const initialHandled = useRef(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   const sendMessage = useCallback((text: string) => {
     const trimmed = text.trim();
@@ -73,6 +74,10 @@ export function AgentChatWorkspace({ initialPrompt }: AgentChatWorkspaceProps) {
     }
   }, [initialPrompt, sendMessage]);
 
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   const walletContextText = wallet.isConnected
     ? `${wallet.truncatedAddress} · ${wallet.chainName} · ${wallet.balanceDisplay}${wallet.balanceNote ? ` — ${wallet.balanceNote}` : ""}`
     : (context?.walletContext ??
@@ -94,56 +99,16 @@ export function AgentChatWorkspace({ initialPrompt }: AgentChatWorkspaceProps) {
       </MotionReveal>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_300px]">
-        <div className="space-y-6 min-w-0">
-          <AnimatedSearchFrame>
-            <form
-              className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                sendMessage(input);
-              }}
-            >
-              <div className="flex min-w-0 flex-1 items-center gap-3">
-                <Search className="shrink-0 text-[#A3A3A3]" size={18} />
-                <input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask Nexus anything about Monad..."
-                  className="w-full min-w-0 bg-transparent text-sm text-white outline-none placeholder:text-[#A3A3A3]"
-                  aria-label="AI command input"
-                />
-              </div>
-              <MotionButton
-                type="submit"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#14F195] px-4 py-2.5 text-sm font-semibold text-[#050505] sm:w-auto"
-              >
-                <Send size={16} />
-                Send
-              </MotionButton>
-            </form>
-          </AnimatedSearchFrame>
-
-          <div className="flex flex-wrap gap-2">
-            {agentSuggestedPrompts.map((prompt) => (
-              <MotionButton
-                key={prompt}
-                type="button"
-                onClick={() => sendMessage(prompt)}
-                className="rounded-full border border-[#242424] bg-[#141414] px-3 py-1.5 text-xs text-[#A3A3A3] hover:border-[#14F195]/40 hover:text-white"
-              >
-                {prompt}
-              </MotionButton>
-            ))}
-          </div>
-
-          <div className="rounded-xl border border-[#242424] bg-[#0E0E0E]">
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className="min-h-[280px] max-h-[min(60vh,560px)] overflow-y-auto rounded-xl border border-[#242424] bg-[#0E0E0E]">
             {messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center gap-3 px-6 py-16 text-center">
+              <div className="flex h-full min-h-[280px] flex-col items-center justify-center gap-3 px-6 py-16 text-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#242424] bg-[#141414] text-[#14F195]">
                   <Bot size={22} />
                 </div>
                 <p className="text-sm text-[#A3A3A3]">
-                  Start with a suggested prompt or type your own question.
+                  Your conversation will appear here. Use the input below to ask
+                  Nexus anything about Monad.
                 </p>
               </div>
             ) : (
@@ -194,6 +159,48 @@ export function AgentChatWorkspace({ initialPrompt }: AgentChatWorkspaceProps) {
                 ))}
               </ul>
             )}
+            <div ref={chatEndRef} />
+          </div>
+
+          <AnimatedSearchFrame>
+            <form
+              className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center"
+              onSubmit={(e) => {
+                e.preventDefault();
+                sendMessage(input);
+              }}
+            >
+              <div className="flex min-w-0 flex-1 items-center gap-3">
+                <Search className="shrink-0 text-[#A3A3A3]" size={18} />
+                <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask Nexus anything about Monad..."
+                  className="w-full min-w-0 bg-transparent text-sm text-white outline-none placeholder:text-[#A3A3A3]"
+                  aria-label="AI command input"
+                />
+              </div>
+              <MotionButton
+                type="submit"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#14F195] px-4 py-2.5 text-sm font-semibold text-[#050505] sm:w-auto"
+              >
+                <Send size={16} />
+                Send
+              </MotionButton>
+            </form>
+          </AnimatedSearchFrame>
+
+          <div className="flex flex-wrap gap-2">
+            {agentSuggestedPrompts.map((prompt) => (
+              <MotionButton
+                key={prompt}
+                type="button"
+                onClick={() => sendMessage(prompt)}
+                className="rounded-full border border-[#242424] bg-[#141414] px-3 py-1.5 text-xs text-[#A3A3A3] hover:border-[#14F195]/40 hover:text-white"
+              >
+                {prompt}
+              </MotionButton>
+            ))}
           </div>
         </div>
 
