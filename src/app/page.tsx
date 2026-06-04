@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   ArrowRight,
   Bot,
@@ -61,15 +62,15 @@ export default function MonadNexusLandingPage() {
 
       <section className="relative z-10 mx-auto max-w-7xl px-5 py-6 lg:px-8">
         <nav className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3">
             <div className="relative h-11 w-11 rounded-2xl bg-gradient-to-br from-[#14F195] via-cyan-300 to-lime-200 shadow-[0_0_38px_rgba(20,241,149,0.35)]">
               <div className="absolute inset-3 rotate-45 rounded-md border-[3px] border-[#041014] border-b-transparent border-l-transparent" />
             </div>
 
-            <h1 className="text-2xl font-black tracking-[-0.04em]">
+            <span className="text-2xl font-black tracking-[-0.04em]">
               Monad Nexus
-            </h1>
-          </div>
+            </span>
+          </Link>
 
           <div className="hidden items-center gap-8 text-sm text-slate-400 lg:flex">
             <span>Features</span>
@@ -79,12 +80,12 @@ export default function MonadNexusLandingPage() {
             <span>Docs</span>
           </div>
 
-          <button
-            type="button"
+          <Link
+            href="/dashboard"
             className="rounded-2xl bg-gradient-to-r from-[#14F195] to-cyan-300 px-5 py-3 text-sm font-black text-[#031014] shadow-[0_0_35px_rgba(20,241,149,0.28)]"
           >
             Launch App
-          </button>
+          </Link>
         </nav>
 
         <div className="grid items-center gap-14 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:py-28">
@@ -108,20 +109,20 @@ export default function MonadNexusLandingPage() {
             </p>
 
             <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-              <button
-                type="button"
+              <Link
+                href="/dashboard"
                 className="inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-[#14F195] to-cyan-300 px-7 py-4 font-black text-[#031014] shadow-[0_0_40px_rgba(20,241,149,0.28)]"
               >
                 Launch Monad Nexus
                 <ArrowRight size={18} />
-              </button>
+              </Link>
 
-              <button
-                type="button"
+              <Link
+                href="/dashboard"
                 className="inline-flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-7 py-4 font-bold text-slate-200 backdrop-blur-xl"
               >
                 View Demo
-              </button>
+              </Link>
             </div>
 
             <div className="mt-12">
@@ -352,13 +353,13 @@ export default function MonadNexusLandingPage() {
                 </p>
               </div>
 
-              <button
-                type="button"
+              <Link
+                href="/dashboard"
                 className="inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-[#14F195] to-cyan-300 px-7 py-4 font-black text-[#031014]"
               >
                 Enter Monad Nexus
                 <ArrowRight size={18} />
-              </button>
+              </Link>
             </div>
           </div>
         </section>
