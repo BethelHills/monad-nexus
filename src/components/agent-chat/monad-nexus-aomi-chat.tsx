@@ -1,6 +1,8 @@
 "use client";
 
-import { Suspense, useCallback, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { AomiApiKeyRuntimeDiagnostics } from "@/components/agent-chat/aomi-api-key-diagnostics";
+import { logAomiApiKeyDiagnostics } from "@/lib/aomi-api-key-debug";
 import "@/components/default.css";
 import "@/components/agent-chat/monad-nexus-aomi-theme.css";
 import { AomiFrame } from "@/components/aomi-frame";
@@ -209,6 +211,15 @@ export function MonadNexusAomiChat({
 }: MonadNexusAomiChatProps) {
   const [, setActivityPrompt] = useState(initialPrompt ?? "");
 
+  useEffect(() => {
+    logAomiApiKeyDiagnostics("client:monad-nexus-aomi-chat", {
+      source: "prop",
+      apiKey: aomiApiKey,
+      clientOptionsApiKey: aomiApiKey,
+      hideApiKey: Boolean(aomiApiKey),
+    });
+  }, [aomiApiKey]);
+
   return (
     <div className={cn("monad-nexus-aomi-chat dark", className)}>
       <MotionReveal>
@@ -237,6 +248,10 @@ export function MonadNexusAomiChat({
           className="dark !h-auto !min-h-0 !rounded-none !border-0 !bg-transparent !shadow-none"
           clientOptions={aomiApiKey ? { apiKey: aomiApiKey } : undefined}
         >
+          <AomiApiKeyRuntimeDiagnostics
+            propApiKey={aomiApiKey}
+            clientOptionsApiKey={aomiApiKey}
+          />
           <MonadNexusChatShell
             aomiApiKey={aomiApiKey}
             initialPrompt={initialPrompt}

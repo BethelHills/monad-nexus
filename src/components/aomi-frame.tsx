@@ -6,7 +6,9 @@ import {
   type FC,
   createContext,
   useContext,
+  useEffect,
 } from "react";
+import { logAomiApiKeyDiagnostics } from "@/lib/aomi-api-key-debug";
 import {
   AomiRuntimeProvider,
   cn,
@@ -107,6 +109,14 @@ const Root: FC<RootProps> = ({
 }) => {
   const resolvedBackendUrl = resolveAomiBackendUrl(backendUrl);
   const frameStyle: CSSProperties = { width, height, ...style };
+
+  useEffect(() => {
+    logAomiApiKeyDiagnostics("client:aomi-frame/root", {
+      source: "prop",
+      clientOptionsApiKey: clientOptions?.apiKey,
+      hideApiKey: Boolean(clientOptions?.apiKey),
+    });
+  }, [clientOptions?.apiKey, resolvedBackendUrl]);
 
   return (
     <AomiRuntimeProvider
