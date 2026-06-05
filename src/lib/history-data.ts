@@ -1,4 +1,4 @@
-export type HistoryType = "ai" | "wallet" | "protocol";
+export type HistoryType = "ai" | "wallet" | "protocol" | "opportunity";
 
 export type HistoryEntry = {
   id: string;
@@ -40,11 +40,11 @@ export const historyEntries: HistoryEntry[] = [
   },
   {
     id: "h4",
-    type: "ai",
+    type: "opportunity",
     title: "Staking opportunity scan",
     summary: "Apriori and Magma flagged as best-fit yield venues for current profile.",
     timestamp: "Yesterday · 3:18 PM",
-    tags: ["staking", "yield"],
+    tags: ["staking", "yield", "opportunity"],
     reviewPrompt: "Find staking opportunities on Monad",
   },
   {
@@ -67,4 +67,9 @@ export const historyEntries: HistoryEntry[] = [
   },
 ];
 
-export type HistoryFilter = "all" | HistoryType;
+export type HistoryFilter =
+  | "all"
+  | "agent"
+  | "wallet"
+  | "protocol"
+  | "opportunity";

@@ -16,19 +16,19 @@ export function SiteHeader() {
       variants={slideDown}
       transition={easeOut}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
         <motion.div
-          className="inline-flex min-w-0 flex-1 sm:flex-none"
+          className="inline-flex min-w-0 max-w-[58%] sm:max-w-none"
           whileHover={reduce ? undefined : { x: 2 }}
         >
           <NexusLogo
             href="/"
-            size="3xl"
+            size="lg"
             priority
-            className="max-w-[min(96vw,720px)]"
+            className="h-12 w-auto max-w-full sm:h-16 md:h-20 lg:h-24"
           />
         </motion.div>
-        <nav className="hidden items-center gap-6 text-xs text-[#A3A3A3] sm:flex">
+        <nav className="hidden items-center gap-6 text-xs text-[#A3A3A3] md:flex">
           {["Ecosystem", "Intelligence", "Protocols"].map((item, i) => (
             <motion.span
               key={item}
@@ -43,9 +43,9 @@ export function SiteHeader() {
         </nav>
         <MotionLink
           href="/dashboard"
-          className="rounded-lg border border-[#242424] bg-[#0E0E0E] px-3 py-1.5 text-xs font-medium text-white transition-colors hover:border-[#14F195]/50 hover:shadow-[0_0_20px_rgba(20,241,149,0.12)]"
+          className="shrink-0 rounded-lg border border-[#242424] bg-[#0E0E0E] px-3 py-1.5 text-xs font-medium text-white transition-colors hover:border-[#14F195]/50 hover:shadow-[0_0_20px_rgba(20,241,149,0.12)]"
         >
-          Launch
+          Launch App
         </MotionLink>
       </div>
     </motion.header>

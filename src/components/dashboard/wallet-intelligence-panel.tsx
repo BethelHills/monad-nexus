@@ -44,7 +44,7 @@ export function WalletIntelligencePanel() {
                   : "border-[#14F195]/30 bg-[#14F195]/10 text-[#14F195]",
               )}
             >
-              {wallet.isDemoMode ? "Demo" : "Live"}
+              {wallet.isDemoMode ? "Demo" : "Wallet Connected"}
             </span>
           </div>
         </header>

@@ -1,14 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import {
-  MotionButton,
   MotionCard,
   MotionItem,
   MotionReveal,
   MotionSection,
   MotionStagger,
 } from "@/components/ui/motion";
+import { buildProtocolAnalyzeUrl } from "@/lib/agent-prompts";
 import { protocolDirectory } from "@/lib/landing-data";
 
 export function ProtocolUniverse() {
@@ -16,7 +17,7 @@ export function ProtocolUniverse() {
 
   return (
     <MotionSection className="border-b border-[#242424] px-4 py-14 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-6xl min-w-0">
         <MotionReveal className="mb-8 max-w-xl">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#A3A3A3]">
             Protocol universe
@@ -26,8 +27,8 @@ export function ProtocolUniverse() {
           </h2>
         </MotionReveal>
 
-        <MotionCard className="hidden overflow-hidden rounded-xl border border-[#242424] md:block">
-          <table className="w-full text-left text-sm">
+        <MotionCard className="hidden overflow-x-auto rounded-xl border border-[#242424] md:block">
+          <table className="w-full min-w-[640px] text-left text-sm">
             <thead className="border-b border-[#242424] bg-[#141414] text-xs uppercase tracking-wider text-[#A3A3A3]">
               <tr>
                 <th className="px-5 py-3 font-medium">Protocol</th>
@@ -57,20 +58,12 @@ export function ProtocolUniverse() {
                   <td className="px-5 py-4 text-[#B7FF7A]">{row.signal}</td>
                   <td className="px-5 py-4 text-[#A3A3A3]">{row.risk}</td>
                   <td className="px-5 py-4">
-                    <div className="flex gap-4 text-xs font-medium">
-                      <MotionButton
-                        type="button"
-                        className="text-[#14F195] hover:underline"
-                      >
-                        Analyze
-                      </MotionButton>
-                      <MotionButton
-                        type="button"
-                        className="text-[#A3A3A3] hover:text-white hover:underline"
-                      >
-                        Add to Watchlist
-                      </MotionButton>
-                    </div>
+                    <Link
+                      href={buildProtocolAnalyzeUrl(row.protocol)}
+                      className="text-xs font-medium text-[#14F195] hover:underline"
+                    >
+                      Analyze
+                    </Link>
                   </td>
                 </motion.tr>
               ))}
@@ -88,13 +81,13 @@ export function ProtocolUniverse() {
                 </div>
                 <p className="mt-2 text-sm text-[#B7FF7A]">{row.signal}</p>
                 <p className="mt-1 text-xs text-[#A3A3A3]">Risk: {row.risk}</p>
-                <div className="mt-4 flex gap-4 text-xs font-medium">
-                  <MotionButton type="button" className="text-[#14F195]">
+                <div className="mt-4">
+                  <Link
+                    href={buildProtocolAnalyzeUrl(row.protocol)}
+                    className="inline-flex w-full items-center justify-center rounded-lg border border-[#242424] bg-[#141414] px-4 py-2 text-xs font-medium text-[#14F195]"
+                  >
                     Analyze
-                  </MotionButton>
-                  <MotionButton type="button" className="text-[#A3A3A3]">
-                    Watchlist
-                  </MotionButton>
+                  </Link>
                 </div>
               </MotionCard>
             </MotionItem>

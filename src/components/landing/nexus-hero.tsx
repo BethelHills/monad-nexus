@@ -1,29 +1,44 @@
 "use client";
 
-import { ArrowRight, Search, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 import {
-  AnimatedSearchFrame,
   MotionButton,
   MotionItem,
   MotionLink,
   MotionReveal,
   MotionStagger,
 } from "@/components/ui/motion";
+import { NexusSearchBar } from "@/components/ui/nexus-search-bar";
+import { NexusStatusBadge } from "@/components/ui/nexus-status-badge";
+import { buildAgentChatUrl } from "@/lib/agent-prompts";
 import { suggestedPrompts } from "@/lib/landing-data";
 import { cn } from "@/lib/utils";
 
 export function NexusHero() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+
+  const goToAgent = (prompt: string) => {
+    router.push(buildAgentChatUrl(prompt));
+  };
+
   return (
     <section className="border-b border-[#242424] px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-3xl min-w-0">
         <MotionReveal>
-          <p className="mb-4 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-[#14F195]">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#14F195] opacity-50" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#14F195]" />
-            </span>
-            The Intelligence Layer for Monad
-          </p>
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-[#14F195]">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#14F195] opacity-50" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#14F195]" />
+              </span>
+              The Intelligence Layer for Monad
+            </p>
+            <NexusStatusBadge label="Aomi Powered" tone="aomi" />
+            <NexusStatusBadge label="Demo intelligence data" tone="demo" />
+          </div>
         </MotionReveal>
 
         <MotionReveal delay={0.08}>
@@ -42,31 +57,24 @@ export function NexusHero() {
           </p>
         </MotionReveal>
 
-        <AnimatedSearchFrame className="mt-8">
-          <div className="flex items-center gap-3 px-4 py-3">
-            <Search className="shrink-0 text-[#A3A3A3]" size={20} />
-            <input
-              type="text"
-              readOnly
-              placeholder="Ask Nexus to analyze a wallet, find protocols, or surface opportunities..."
-              className="w-full min-w-0 bg-transparent text-sm text-white outline-none placeholder:text-[#A3A3A3] sm:text-base"
-              aria-label="Ask Nexus"
-            />
-            <MotionButton
-              type="button"
-              className="hidden shrink-0 rounded-lg bg-[#14F195] px-4 py-2 text-xs font-semibold text-[#050505] sm:inline-flex sm:items-center sm:gap-1"
-            >
-              <Sparkles size={14} />
-              Ask
-            </MotionButton>
-          </div>
-        </AnimatedSearchFrame>
+        <MotionReveal delay={0.2} className="mt-8">
+          <NexusSearchBar
+            value={query}
+            onChange={setQuery}
+            onSubmit={goToAgent}
+            placeholder="Ask Nexus to analyze a wallet, find protocols, or surface opportunities..."
+            submitLabel="Send"
+            ariaLabel="Ask Nexus"
+            emptyHint="Type a question about Monad to open Agent Chat."
+          />
+        </MotionReveal>
 
         <MotionStagger className="mt-4 flex flex-wrap gap-2">
           {suggestedPrompts.map((prompt) => (
             <MotionItem key={prompt}>
               <MotionButton
                 type="button"
+                onClick={() => goToAgent(prompt)}
                 className="rounded-full border border-[#242424] bg-[#141414] px-3 py-1.5 text-xs text-[#A3A3A3] transition-colors hover:border-[#14F195]/40 hover:text-white hover:shadow-[0_0_16px_rgba(20,241,149,0.1)]"
               >
                 {prompt}
@@ -82,11 +90,11 @@ export function NexusHero() {
               "inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#14F195] px-5 py-3 text-sm font-semibold text-[#050505] shadow-[0_0_24px_rgba(20,241,149,0.2)] transition-shadow hover:shadow-[0_0_36px_rgba(20,241,149,0.35)] sm:w-auto",
             )}
           >
-            Launch Nexus
+            Launch App
             <ArrowRight size={16} />
           </MotionLink>
           <MotionLink
-            href="/dashboard"
+            href="/opportunities"
             className="inline-flex w-full items-center justify-center rounded-lg border border-[#242424] bg-[#0E0E0E] px-5 py-3 text-sm font-medium text-white transition-colors hover:border-[#14F195]/40 sm:w-auto"
           >
             Explore Protocols

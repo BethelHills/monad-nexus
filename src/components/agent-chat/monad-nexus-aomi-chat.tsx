@@ -11,6 +11,7 @@ import {
   MotionCard,
   MotionReveal,
 } from "@/components/ui/motion";
+import { NexusStatusBadge } from "@/components/ui/nexus-status-badge";
 import { useWalletPortfolio } from "@/hooks/use-wallet-portfolio";
 import {
   detectStructuredCards,
@@ -78,19 +79,27 @@ function MonadNexusChatShell({
     : "Connect a wallet in the chat controls for personalized Monad analysis.";
 
   return (
-    <div className="grid w-full min-w-0 grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_280px]">
+    <div className="grid w-full min-w-0 grid-cols-1 gap-4 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,260px)]">
       <div className="flex min-w-0 flex-col gap-4">
-        <div className="flex min-h-[min(52vh,480px)] max-h-[min(78vh,calc(100dvh-12rem))] flex-col overflow-hidden rounded-xl border border-[#242424] bg-[#0E0E0E] sm:min-h-[min(60vh,560px)]">
-          <div className="shrink-0 border-b border-[#242424] px-4 py-3 sm:px-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#242424] bg-[#141414] text-[#14F195]">
+        <div className="flex min-h-[min(48vh,420px)] max-h-[min(82vh,calc(100dvh-10rem))] flex-col overflow-hidden rounded-xl border border-[#242424] bg-[#0E0E0E] sm:min-h-[min(56vh,520px)]">
+          <div className="shrink-0 border-b border-[#242424] px-3 py-3 sm:px-5">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#242424] bg-[#141414] text-[#14F195]">
                 <Sparkles size={20} />
               </div>
-              <div>
+              <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-white">Aomi Agent</p>
                 <p className="text-xs text-[#A3A3A3]">
                   Monad ecosystem intelligence · wallet-aware
                 </p>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <NexusStatusBadge label="Aomi Powered" tone="aomi" />
+                {wallet.isConnected ? (
+                  <NexusStatusBadge label="Wallet Connected" tone="wallet" />
+                ) : (
+                  <NexusStatusBadge label="Demo" tone="demo" />
+                )}
               </div>
             </div>
           </div>
@@ -121,13 +130,12 @@ function MonadNexusChatShell({
         </div>
 
         {fallbackCards && fallbackCards.length > 0 && (
-          <div className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-4">
+          <div className="min-w-0 overflow-hidden rounded-xl border border-[#242424] bg-[#0E0E0E] p-4">
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#A3A3A3]">
               Nexus structured insight
             </p>
             <p className="mt-1 text-xs text-[#A3A3A3]">
-              Supplemental cards for this topic — live answers come from Aomi
-              above.
+              Supplemental cards for this topic — answers above come from Aomi.
             </p>
             <div className="mt-3">
               <AgentStructuredCards cards={fallbackCards} />
@@ -141,9 +149,9 @@ function MonadNexusChatShell({
               key={prompt}
               type="button"
               onClick={() => void handlePrompt(prompt)}
-              className="rounded-full border border-[#242424] bg-[#141414] px-3 py-1.5 text-xs text-[#A3A3A3] hover:border-[#14F195]/40 hover:text-white"
+              className="max-w-full rounded-full border border-[#242424] bg-[#141414] px-3 py-1.5 text-left text-xs text-[#A3A3A3] hover:border-[#14F195]/40 hover:text-white"
             >
-              {prompt}
+              <span className="line-clamp-2">{prompt}</span>
             </MotionButton>
           ))}
         </div>
@@ -211,10 +219,14 @@ export function MonadNexusAomiChat({
           Monad ecosystem intelligence
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-[#A3A3A3]">
-          Live Aomi agent for protocols, wallets, staking, and ecosystem
+          Aomi-powered agent for protocols, wallets, staking, and ecosystem
           activity on Monad Testnet. Structured Nexus cards appear below when
           your question matches wallet, yield, or protocol topics.
         </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <NexusStatusBadge label="Aomi Powered" tone="aomi" />
+          <NexusStatusBadge label="Demo intelligence data" tone="demo" />
+        </div>
       </MotionReveal>
 
       <div className="mt-6">

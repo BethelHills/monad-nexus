@@ -72,3 +72,22 @@
 .monad-nexus-aomi-thread.dark .aui-thread-viewport {
   overflow-x: hidden !important;
 }
+
+.monad-nexus-aomi-chat,
+.monad-nexus-aomi-thread.dark .aui-composer-action-wrapper,
+.monad-nexus-aomi-thread.dark .aui-composer-action-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 640px) {
+  .monad-nexus-aomi-thread.dark .aui-composer-root {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .monad-nexus-aomi-thread.dark .aui-composer-send,
+  .monad-nexus-aomi-thread.dark .aui-composer-cancel {
+    min-width: 2.25rem;
+    min-height: 2.25rem;
+  }
+}

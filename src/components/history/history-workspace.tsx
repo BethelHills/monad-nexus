@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowRight, Bot, Search, Wallet } from "lucide-react";
+import { ArrowRight, Bot, Search, TrendingUp, Wallet } from "lucide-react";
 import { MotionReveal } from "@/components/ui/motion";
-import { buildAgentChatUrl } from "@/lib/agent-prompts";
+import { NexusSearchBar } from "@/components/ui/nexus-search-bar";
+import { NexusStatusBadge } from "@/components/ui/nexus-status-badge";
+import { buildHistoryReviewUrl } from "@/lib/agent-prompts";
 import {
   historyEntries,
   type HistoryFilter,
@@ -14,31 +16,42 @@ import { cn } from "@/lib/utils";
 
 const filters: { id: HistoryFilter; label: string }[] = [
   { id: "all", label: "All" },
-  { id: "ai", label: "AI insights" },
+  { id: "agent", label: "Agent" },
   { id: "wallet", label: "Wallet" },
   { id: "protocol", label: "Protocol" },
+  { id: "opportunity", label: "Opportunity" },
 ];
 
 function typeIcon(type: HistoryType) {
   if (type === "ai") return Bot;
   if (type === "wallet") return Wallet;
+  if (type === "opportunity") return TrendingUp;
   return Search;
 }
 
+function matchesFilter(entry: (typeof historyEntries)[number], filter: HistoryFilter) {
+  if (filter === "all") return true;
+  if (filter === "agent") return entry.type === "ai";
+  return entry.type === filter;
+}
+
 export function HistoryWorkspace() {
+  const [draft, setDraft] = useState("");
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<HistoryFilter>("all");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return historyEntries.filter((entry) => {
-      const matchesFilter = filter === "all" || entry.type === filter;
+      const matchesFilterType = matchesFilter(entry, filter);
       const matchesQuery =
         !q ||
         entry.title.toLowerCase().includes(q) ||
         entry.summary.toLowerCase().includes(q) ||
+        entry.timestamp.toLowerCase().includes(q) ||
+        entry.type.toLowerCase().includes(q) ||
         entry.tags.some((t) => t.toLowerCase().includes(q));
-      return matchesFilter && matchesQuery;
+      return matchesFilterType && matchesQuery;
     });
   }, [query, filter]);
 
@@ -46,13 +59,14 @@ export function HistoryWorkspace() {
     const ai = filtered.filter((e) => e.type === "ai");
     const wallet = filtered.filter((e) => e.type === "wallet");
     const protocol = filtered.filter((e) => e.type === "protocol");
-    return { ai, wallet, protocol };
+    const opportunity = filtered.filter((e) => e.type === "opportunity");
+    return { ai, wallet, protocol, opportunity };
   }, [filtered]);
 
   const showEmpty = filtered.length === 0;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-6xl min-w-0 px-4 py-6 sm:px-6 lg:px-8">
       <MotionReveal>
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#A3A3A3]">
           History
@@ -64,21 +78,21 @@ export function HistoryWorkspace() {
           Search and filter past AI insights, wallet analysis, and protocol
           research.
         </p>
+        <div className="mt-3">
+          <NexusStatusBadge label="Demo intelligence data" tone="demo" />
+        </div>
       </MotionReveal>
 
       <div className="mt-6 space-y-4">
-        <div className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-1">
-          <div className="flex items-center gap-3 px-4 py-3">
-            <Search className="shrink-0 text-[#A3A3A3]" size={18} />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search history..."
-              className="w-full min-w-0 bg-transparent text-sm text-white outline-none placeholder:text-[#A3A3A3]"
-              aria-label="Search history"
-            />
-          </div>
-        </div>
+        <NexusSearchBar
+          value={draft}
+          onChange={setDraft}
+          onSubmit={(value) => setQuery(value)}
+          placeholder="Search by title, category, status, protocol, or timestamp..."
+          submitLabel="Search"
+          ariaLabel="Search history"
+          emptyHint="Enter a term to filter history."
+        />
 
         <div className="flex flex-wrap gap-2">
           {filters.map((f) => (
@@ -103,17 +117,30 @@ export function HistoryWorkspace() {
         <div className="mt-10 rounded-xl border border-dashed border-[#242424] bg-[#0E0E0E] px-6 py-16 text-center">
           <p className="text-sm font-medium text-white">No history found</p>
           <p className="mt-2 text-xs text-[#A3A3A3]">
-            Try a different search term or filter. New sessions will appear here
-            automatically.
+            Try a different search term or filter.
           </p>
+          {(query || filter !== "all") && (
+            <button
+              type="button"
+              onClick={() => {
+                setDraft("");
+                setQuery("");
+                setFilter("all");
+              }}
+              className="mt-4 rounded-lg border border-[#242424] px-4 py-2 text-xs text-white hover:border-[#14F195]/40"
+            >
+              Clear filters
+            </button>
+          )}
         </div>
       ) : (
         <div className="mt-8 space-y-10">
           {(
             [
-              { key: "ai" as const, title: "AI insight history" },
+              { key: "ai" as const, title: "Agent insight history" },
               { key: "wallet" as const, title: "Wallet analysis history" },
               { key: "protocol" as const, title: "Protocol research history" },
+              { key: "opportunity" as const, title: "Opportunity history" },
             ] as const
           ).map(
             (section) =>
@@ -160,8 +187,8 @@ export function HistoryWorkspace() {
                               </div>
                             </div>
                             <Link
-                              href={buildAgentChatUrl(entry.reviewPrompt)}
-                              className="inline-flex w-full items-center justify-center gap-1 rounded-lg border border-[#242424] bg-[#141414] px-4 py-2 text-xs font-medium text-[#14F195] transition-colors hover:border-[#14F195]/40 sm:w-auto sm:shrink-0"
+                              href={buildHistoryReviewUrl(entry.title)}
+                              className="inline-flex w-full items-center justify-center gap-1 rounded-lg border border-[#242424] bg-[#141414] px-4 py-2.5 text-xs font-medium text-[#14F195] transition-colors hover:border-[#14F195]/40 sm:w-auto sm:shrink-0"
                             >
                               Review
                               <ArrowRight size={14} />

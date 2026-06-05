@@ -1,23 +1,32 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { WalletStatusButton } from "@/components/wallet/wallet-status-button";
 import {
-  AnimatedSearchFrame,
   MotionButton,
   MotionReveal,
   MotionStagger,
   MotionItem,
   PulseDot,
 } from "@/components/ui/motion";
+import { NexusSearchBar } from "@/components/ui/nexus-search-bar";
+import { NexusStatusBadge } from "@/components/ui/nexus-status-badge";
 import { useWalletPortfolio } from "@/hooks/use-wallet-portfolio";
+import { buildAgentChatUrl } from "@/lib/agent-prompts";
 import { commandSuggestions } from "@/lib/dashboard-data";
 import { easeOut, slideDown } from "@/lib/motion";
 
 export function NexusCommandCenter() {
   const reduce = useReducedMotion();
+  const router = useRouter();
   const wallet = useWalletPortfolio();
+  const [query, setQuery] = useState("");
+
+  const goToAgent = (prompt: string) => {
+    router.push(buildAgentChatUrl(prompt));
+  };
 
   return (
     <motion.section
@@ -27,8 +36,8 @@ export function NexusCommandCenter() {
       variants={slideDown}
       transition={easeOut}
     >
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto max-w-6xl min-w-0">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <MotionReveal>
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#A3A3A3]">
               Dashboard
@@ -36,39 +45,40 @@ export function NexusCommandCenter() {
             <h1 className="mt-2 text-xl font-semibold text-white sm:text-2xl">
               Command center
             </h1>
-            {wallet.isDemoMode && (
-              <p className="mt-1 text-xs text-[#A3A3A3]">
-                Demo mode · connect wallet for live data
-              </p>
-            )}
+            <div className="mt-2 flex flex-wrap gap-2">
+              {wallet.isConnected ? (
+                <NexusStatusBadge label="Wallet Connected" tone="wallet" />
+              ) : (
+                <NexusStatusBadge label="Demo intelligence data" tone="demo" />
+              )}
+              <NexusStatusBadge label="Aomi Powered" tone="aomi" />
+            </div>
           </MotionReveal>
-          <MotionReveal delay={0.08} className="flex flex-wrap items-center gap-2">
-            <span className="flex items-center gap-2 rounded-md border border-[#242424] bg-[#141414] px-2.5 py-1 text-xs font-medium text-[#B7FF7A]">
+          <MotionReveal delay={0.08} className="flex w-full flex-col gap-2 sm:w-auto sm:items-end">
+            <span className="flex w-full items-center justify-center gap-2 rounded-md border border-[#242424] bg-[#141414] px-2.5 py-1 text-xs font-medium text-[#B7FF7A] sm:w-auto">
               <PulseDot />
               {wallet.isConnected ? wallet.chainName : "Monad Testnet"}
             </span>
-            <WalletStatusButton className="w-full sm:w-auto" />
+            <WalletStatusButton className="w-full sm:max-w-[220px]" />
           </MotionReveal>
         </div>
 
-        <AnimatedSearchFrame>
-          <div className="flex items-center gap-3 px-4 py-3">
-            <Search className="shrink-0 text-[#A3A3A3]" size={18} />
-            <input
-              type="text"
-              readOnly
-              placeholder="Command Nexus — analyze wallet, protocols, or opportunities..."
-              className="w-full min-w-0 bg-transparent text-sm text-white outline-none placeholder:text-[#A3A3A3]"
-              aria-label="Nexus command input"
-            />
-          </div>
-        </AnimatedSearchFrame>
+        <NexusSearchBar
+          value={query}
+          onChange={setQuery}
+          onSubmit={goToAgent}
+          placeholder="Command Nexus — analyze wallet, protocols, or opportunities..."
+          submitLabel="Send"
+          ariaLabel="Nexus command input"
+          emptyHint="Type a command to open Agent Chat."
+        />
 
         <MotionStagger className="mt-3 flex flex-wrap gap-2">
           {commandSuggestions.map((cmd) => (
             <MotionItem key={cmd}>
               <MotionButton
                 type="button"
+                onClick={() => goToAgent(cmd)}
                 className="rounded-md border border-[#242424] px-2.5 py-1 text-xs text-[#A3A3A3] hover:border-[#14F195]/30 hover:text-white"
               >
                 {cmd}

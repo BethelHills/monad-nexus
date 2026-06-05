@@ -1,7 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useSyncExternalStore } from "react";
+import { WalletStatusButton } from "@/components/wallet/wallet-status-button";
 import { MotionButton, MotionReveal } from "@/components/ui/motion";
+import { NexusSearchBar } from "@/components/ui/nexus-search-bar";
+import { NexusStatusBadge } from "@/components/ui/nexus-status-badge";
+import { buildAgentChatUrl } from "@/lib/agent-prompts";
 import {
   defaultSettings,
   loadSettings,
@@ -55,6 +60,7 @@ function Toggle({
 
 function SettingsForm() {
   const [settings, setSettings] = useState<NexusSettings>(() => loadSettings());
+  const [providerSearch, setProviderSearch] = useState("");
   const [statusMessage, setStatusMessage] = useState<string | null>(
     "Settings restored from your device.",
   );
@@ -77,8 +83,18 @@ function SettingsForm() {
     setTimeout(() => setStatusMessage(null), 3000);
   }
 
+  const providerOptions = [
+    "OpenRouter",
+    "Aomi API",
+    "Custom endpoint",
+    "Local model",
+  ];
+  const filteredProviders = providerOptions.filter((p) =>
+    p.toLowerCase().includes(providerSearch.trim().toLowerCase()),
+  );
+
   return (
-    <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-3xl min-w-0 px-4 py-6 sm:px-6 lg:px-8">
       <MotionReveal>
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#A3A3A3]">
           Settings
@@ -90,9 +106,62 @@ function SettingsForm() {
           Configure AI behavior, risk, notifications, and data sources. Saved to
           your browser.
         </p>
+        <div className="mt-3">
+          <NexusStatusBadge label="Demo intelligence data" tone="demo" />
+        </div>
       </MotionReveal>
 
       <div className="mt-8 space-y-6">
+        <section className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-5">
+          <h2 className="text-sm font-semibold text-white">Wallet</h2>
+          <p className="mt-2 text-xs text-[#A3A3A3]">
+            Connect a wallet for personalized Monad analysis in Agent Chat.
+          </p>
+          <div className="mt-4">
+            <WalletStatusButton className="w-full sm:w-auto sm:max-w-[260px]" />
+          </div>
+        </section>
+
+        <section className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-5">
+          <h2 className="text-sm font-semibold text-white">AI provider</h2>
+          <p className="mt-2 text-xs text-[#A3A3A3]">
+            Search providers or open Agent Chat for setup help.
+          </p>
+          <div className="mt-4">
+            <NexusSearchBar
+              value={providerSearch}
+              onChange={setProviderSearch}
+              onSubmit={() => undefined}
+              placeholder="Search AI providers..."
+              submitLabel="Search"
+              ariaLabel="Search AI providers"
+              emptyHint="Type a provider name to filter the list."
+            />
+          </div>
+          <ul className="mt-4 space-y-2">
+            {filteredProviders.length === 0 ? (
+              <li className="text-xs text-[#A3A3A3]">No providers match.</li>
+            ) : (
+              filteredProviders.map((provider) => (
+                <li
+                  key={provider}
+                  className="rounded-lg border border-[#242424] bg-[#141414] px-3 py-2 text-sm text-white"
+                >
+                  {provider}
+                </li>
+              ))
+            )}
+          </ul>
+          <Link
+            href={buildAgentChatUrl(
+              "Help me configure AI settings for Monad Nexus",
+            )}
+            className="mt-4 inline-flex w-full items-center justify-center rounded-lg border border-[#14F195]/30 bg-[#14F195]/10 px-4 py-2.5 text-sm font-medium text-[#14F195] transition-colors hover:border-[#14F195]/50 sm:w-auto"
+          >
+            Configure AI Provider
+          </Link>
+        </section>
+
         <section className="rounded-xl border border-[#242424] bg-[#0E0E0E] p-5">
           <h2 className="text-sm font-semibold text-white">AI behavior</h2>
           <label className="mt-4 block text-xs text-[#A3A3A3]">Verbosity</label>

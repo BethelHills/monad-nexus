@@ -39,7 +39,7 @@ export function AppHeader({ onMenuOpen }: AppHeaderProps) {
             {current.label}
           </span>
         )}
-        <WalletStatusButton compact className="max-w-[140px]" />
+        <WalletStatusButton compact className="max-w-[min(42vw,160px)]" />
       </div>
     </header>
   );

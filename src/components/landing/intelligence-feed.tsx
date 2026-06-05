@@ -24,11 +24,11 @@ export function IntelligenceFeed() {
 
   return (
     <MotionSection className="border-b border-[#242424] px-4 py-14 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-6xl min-w-0">
         <MotionReveal className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#A3A3A3]">
-              Live feed
+              Demo intelligence feed
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-white sm:text-3xl">
               Intelligence stream
