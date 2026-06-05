@@ -51,9 +51,13 @@ export function AppSidebar({ open, onClose }: AppSidebarProps) {
           open ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >
-        <div className="flex items-center justify-between border-b border-[#242424] px-4 py-4">
-          <Link href="/dashboard" onClick={onClose} className="inline-flex shrink-0">
-            <NexusLogo size="sm" className="max-w-[min(100%,200px)]" />
+        <div className="flex items-center justify-between border-b border-[#242424] px-4 py-5">
+          <Link
+            href="/dashboard"
+            onClick={onClose}
+            className="inline-flex min-w-0 flex-1 pr-2"
+          >
+            <NexusLogo size="lg" className="w-full max-w-[240px]" />
           </Link>
           <button
             type="button"

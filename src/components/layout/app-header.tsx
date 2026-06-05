@@ -19,8 +19,8 @@ export function AppHeader({ onMenuOpen }: AppHeaderProps) {
   );
 
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[#242424] bg-[#050505]/95 px-4 py-3 backdrop-blur-md lg:hidden">
-      <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[#242424] bg-[#050505]/95 px-4 py-4 backdrop-blur-md lg:hidden">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
         <button
           type="button"
           onClick={onMenuOpen}
@@ -29,8 +29,8 @@ export function AppHeader({ onMenuOpen }: AppHeaderProps) {
         >
           <Menu size={18} />
         </button>
-        <Link href="/dashboard" className="inline-flex shrink-0">
-          <NexusLogo size="sm" className="max-w-[min(55vw,180px)]" />
+        <Link href="/dashboard" className="inline-flex min-w-0 flex-1">
+          <NexusLogo size="md" className="max-w-[min(62vw,260px)]" />
         </Link>
       </div>
       <div className="flex items-center gap-2">
