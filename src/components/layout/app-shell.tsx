@@ -18,7 +18,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <AppSidebar open={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
-      <div className="flex min-h-screen flex-col lg:pl-60">
+      <div className="flex min-h-screen flex-col lg:pl-72">
         <AppHeader onMenuOpen={() => setDrawerOpen(true)} />
         <main className="flex-1">{children}</main>
       </div>

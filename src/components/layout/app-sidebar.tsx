@@ -47,17 +47,17 @@ export function AppSidebar({ open, onClose }: AppSidebarProps) {
     <>
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 flex h-full w-[min(280px,88vw)] flex-col border-r border-[#242424] bg-[#0E0E0E] transition-transform duration-300 lg:z-30 lg:w-60 lg:translate-x-0",
+          "fixed left-0 top-0 z-50 flex h-full w-[min(300px,88vw)] flex-col border-r border-[#242424] bg-[#0E0E0E] transition-transform duration-300 lg:z-30 lg:w-72 lg:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >
-        <div className="flex items-center justify-between border-b border-[#242424] px-3 py-6">
+        <div className="flex items-center justify-between border-b border-[#242424] px-3 py-7">
           <Link
             href="/dashboard"
             onClick={onClose}
             className="inline-flex min-w-0 flex-1 pr-2"
           >
-            <NexusLogo size="xl" className="w-full max-w-full" />
+            <NexusLogo size="2xl" className="w-full max-w-full" />
           </Link>
           <button
             type="button"

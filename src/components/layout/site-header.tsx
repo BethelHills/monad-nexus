@@ -16,16 +16,16 @@ export function SiteHeader() {
       variants={slideDown}
       transition={easeOut}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
         <motion.div
           className="inline-flex min-w-0 flex-1 sm:flex-none"
           whileHover={reduce ? undefined : { x: 2 }}
         >
           <NexusLogo
             href="/"
-            size="2xl"
+            size="3xl"
             priority
-            className="max-w-[min(92vw,620px)]"
+            className="max-w-[min(96vw,720px)]"
           />
         </motion.div>
         <nav className="hidden items-center gap-6 text-xs text-[#A3A3A3] sm:flex">
