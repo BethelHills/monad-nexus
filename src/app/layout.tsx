@@ -18,6 +18,16 @@ export const metadata: Metadata = {
   title: "Monad Nexus — The Intelligence Layer for Monad",
   description:
     "Discover protocols, analyze portfolios, and navigate the Monad ecosystem with AI-powered intelligence.",
+  icons: {
+    icon: "/images/monad-nexus-logo.png",
+    apple: "/images/monad-nexus-logo.png",
+  },
+  openGraph: {
+    title: "Monad Nexus — The Intelligence Layer for Monad",
+    description:
+      "Discover protocols, analyze portfolios, and navigate the Monad ecosystem with AI-powered intelligence.",
+    images: ["/images/monad-nexus-logo.png"],
+  },
 };
 
 export default function RootLayout({

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
+import { NexusLogo } from "@/components/brand/nexus-logo";
 import { WalletStatusButton } from "@/components/wallet/wallet-status-button";
 import { appNavItems } from "@/lib/app-nav";
 
@@ -28,8 +29,8 @@ export function AppHeader({ onMenuOpen }: AppHeaderProps) {
         >
           <Menu size={18} />
         </button>
-        <Link href="/dashboard" className="text-sm font-semibold text-white">
-          Monad <span className="text-[#14F195]">Nexus</span>
+        <Link href="/dashboard" className="inline-flex shrink-0">
+          <NexusLogo size="sm" className="max-w-[min(55vw,180px)]" />
         </Link>
       </div>
       <div className="flex items-center gap-2">

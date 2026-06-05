@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
+import { NexusLogo } from "@/components/brand/nexus-logo";
 import { WalletStatusButton } from "@/components/wallet/wallet-status-button";
 import { appNavItems } from "@/lib/app-nav";
 import { cn } from "@/lib/utils";
@@ -51,13 +52,8 @@ export function AppSidebar({ open, onClose }: AppSidebarProps) {
         )}
       >
         <div className="flex items-center justify-between border-b border-[#242424] px-4 py-4">
-          <Link
-            href="/dashboard"
-            onClick={onClose}
-            className="text-sm font-semibold text-white"
-          >
-            Monad{" "}
-            <span className="text-[#14F195]">Nexus</span>
+          <Link href="/dashboard" onClick={onClose} className="inline-flex shrink-0">
+            <NexusLogo size="sm" className="max-w-[min(100%,200px)]" />
           </Link>
           <button
             type="button"

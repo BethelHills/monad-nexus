@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import { NexusLogo } from "@/components/brand/nexus-logo";
 import { MotionLink } from "@/components/ui/motion";
 import { easeOut, slideDown } from "@/lib/motion";
 
@@ -17,20 +17,12 @@ export function SiteHeader() {
       transition={easeOut}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="group text-sm font-semibold tracking-tight text-white"
+        <motion.div
+          className="inline-flex"
+          whileHover={reduce ? undefined : { x: 2 }}
         >
-          <motion.span
-            className="inline-block"
-            whileHover={reduce ? undefined : { x: 2 }}
-          >
-            Monad{" "}
-            <span className="text-[#14F195] transition-colors group-hover:text-[#B7FF7A]">
-              Nexus
-            </span>
-          </motion.span>
-        </Link>
+          <NexusLogo href="/" size="md" priority />
+        </motion.div>
         <nav className="hidden items-center gap-6 text-xs text-[#A3A3A3] sm:flex">
           {["Ecosystem", "Intelligence", "Protocols"].map((item, i) => (
             <motion.span
