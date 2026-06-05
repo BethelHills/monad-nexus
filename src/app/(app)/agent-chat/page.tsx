@@ -1,4 +1,4 @@
-import { AgentChatWorkspace } from "@/components/agent-chat/agent-chat-workspace";
+import { MonadNexusAomiChat } from "@/components/agent-chat/monad-nexus-aomi-chat";
 
 export default async function AgentChatPage({
   searchParams,
@@ -6,5 +6,14 @@ export default async function AgentChatPage({
   searchParams: Promise<{ prompt?: string }>;
 }) {
   const { prompt } = await searchParams;
-  return <AgentChatWorkspace initialPrompt={prompt} />;
+  const aomiApiKey =
+    process.env.AOMI_API_KEY?.trim() ||
+    process.env.OPENROUTER_API_KEY?.trim() ||
+    undefined;
+
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+      <MonadNexusAomiChat initialPrompt={prompt} aomiApiKey={aomiApiKey} />
+    </div>
+  );
 }

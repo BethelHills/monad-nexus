@@ -1,0 +1,74 @@
+/**
+ * Monad Nexus Agent Chat — dark Nexus surface over Aomi assistant-ui.
+ */
+
+.monad-nexus-aomi-chat,
+.monad-nexus-aomi-chat.dark,
+.monad-nexus-aomi-thread.dark {
+  color-scheme: dark;
+  --thread-max-width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  --background: transparent;
+  --foreground: #ffffff;
+  --card: #141414;
+  --card-foreground: #ffffff;
+  --popover: #0e0e0e;
+  --popover-foreground: #ffffff;
+  --primary: #14f195;
+  --primary-foreground: #050505;
+  --secondary: #141414;
+  --secondary-foreground: #ffffff;
+  --muted: #141414;
+  --muted-foreground: #a3a3a3;
+  --accent: #141414;
+  --accent-foreground: #ffffff;
+  --destructive: #f87171;
+  --border: #242424;
+  --input: #242424;
+  --ring: #14f195;
+  --aomi-welcome-title: #ffffff;
+  --aomi-welcome-subtitle: #a3a3a3;
+}
+
+.monad-nexus-aomi-thread.dark .aui-root,
+.monad-nexus-aomi-thread.dark .aui-thread-root,
+.monad-nexus-aomi-thread.dark .aui-thread-viewport,
+.monad-nexus-aomi-thread.dark .aui-composer-wrapper,
+.monad-nexus-aomi-thread.dark [data-slot="sidebar-inset"] {
+  background-color: transparent !important;
+  color: var(--foreground);
+}
+
+.monad-nexus-aomi-thread.dark .aui-composer-root {
+  background-color: #141414 !important;
+  border-color: #242424 !important;
+  color: #ffffff;
+}
+
+.monad-nexus-aomi-thread.dark .aui-composer-input,
+.monad-nexus-aomi-thread.dark .aui-edit-composer-input {
+  color: #ffffff !important;
+}
+
+.monad-nexus-aomi-thread.dark .aui-composer-input::placeholder,
+.monad-nexus-aomi-thread.dark .aui-edit-composer-input::placeholder {
+  color: #a3a3a3 !important;
+}
+
+.monad-nexus-aomi-thread.dark .aui-thread-welcome-suggestion {
+  border-color: #242424 !important;
+  background-color: #141414 !important;
+  color: #a3a3a3 !important;
+}
+
+.monad-nexus-aomi-thread.dark .aui-thread-welcome-suggestion:hover,
+.monad-nexus-aomi-thread.dark .aui-thread-welcome-suggestion[data-highlighted] {
+  background-color: #0e0e0e !important;
+  border-color: rgb(20 241 149 / 0.35) !important;
+  color: #ffffff !important;
+}
+
+.monad-nexus-aomi-thread.dark .aui-thread-viewport {
+  overflow-x: hidden !important;
+}

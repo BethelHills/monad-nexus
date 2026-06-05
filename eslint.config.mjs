@@ -5,9 +5,15 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  // Override default ignores of eslint-config-next.
+  {
+    ignores: [
+      "src/components/assistant-ui/**",
+      "src/components/control-bar/**",
+      "src/components/icons/**",
+      "src/hooks/use-mobile.ts",
+    ],
+  },
   globalIgnores([
-    // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
     "build/**",

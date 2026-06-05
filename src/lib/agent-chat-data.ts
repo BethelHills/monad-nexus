@@ -1,11 +1,11 @@
 import { getProtocolByName } from "@/lib/protocols-data";
 
 export const agentSuggestedPrompts = [
+  "What protocols are active on Monad?",
   "Analyze my Monad wallet",
-  "Show trending Monad protocols",
-  "Find staking opportunities",
-  "Explain recent ecosystem activity",
-  "Compare Kuru, Ambient, and Apriori",
+  "Show staking opportunities on Monad",
+  "Compare Kuru, Ambient, Apriori, and Magma",
+  "Explain recent Monad ecosystem activity",
 ] as const;
 
 export type InsightCard = {
