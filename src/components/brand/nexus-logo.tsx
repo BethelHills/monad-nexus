@@ -8,10 +8,11 @@ const LOGO_WIDTH = 1536;
 const LOGO_HEIGHT = 1024;
 
 const sizeClasses = {
-  sm: "h-10 sm:h-11",
-  md: "h-12 sm:h-14",
-  lg: "h-14 sm:h-16",
-  xl: "h-16 sm:h-20",
+  sm: "h-12 sm:h-14",
+  md: "h-16 sm:h-[4.5rem]",
+  lg: "h-20 sm:h-24",
+  xl: "h-24 sm:h-28",
+  "2xl": "h-28 sm:h-32 md:h-36",
 } as const;
 
 type NexusLogoProps = {
